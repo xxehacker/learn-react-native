@@ -28,6 +28,15 @@ async function initDB() {
         created_at DATE NOT NULL DEFAULT CURRENT_DATE,
         updated_at DATE NOT NULL DEFAULT CURRENT_DATE
         )`;
+
+    await sql`CREATE TABLE IF NOT EXISTS contacts (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      email VARCHAR(255) NOT NULL,
+      message TEXT NOT NULL,
+      created_at DATE NOT NULL DEFAULT CURRENT_DATE,
+      updated_at DATE NOT NULL DEFAULT CURRENT_DATE
+    )`;
     console.log("Connected to PostgreSQL");
   } catch (error) {
     console.log("Error creating table", error);
@@ -35,13 +44,15 @@ async function initDB() {
   }
 }
 
-//! import Routes 
+//! import Routes
 import transactionRoutes from "./routes/transactions.routes.js";
-
+//! import contact
+import contactRoutes from "./routes/contact.routes.js";
 
 //! use Routes
 app.use("/api/v1/transactions", transactionRoutes);
-
+//! use contact
+app.use("/api/v1/contact", contactRoutes);
 
 initDB().then(() => {
   app.listen(process.env.PORT || 9002, () => {
